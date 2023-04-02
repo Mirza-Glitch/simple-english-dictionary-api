@@ -1,5 +1,4 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
 
 let alphabets = [
   "a",
@@ -40,7 +39,7 @@ function reWriteJson(filePre) {
   function getMeanings() {
     let keyWord = Object.keys(data);
     console.time(filePre);
-    for (i = 0; i < keyWord.length; i++) {
+    for (let i = 0; i < keyWord.length; i++) {
       let key = keyWord[i];
       let keyObj = data[keyWord[i]];
       var obj = {};
@@ -122,7 +121,7 @@ fs.open("./processed/admin.json", "r", function (err, fd) {
   }
 });
 
-fs.mkdir(path.join(__dirname, "processed"), { recursive: true }, (err) => {
+fs.mkdir("./processed", { recursive: true }, (err) => {
   if (err) {
     console.log(err, "err making dir");
     return;
