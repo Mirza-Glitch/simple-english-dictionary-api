@@ -112,7 +112,7 @@ function time_ago(time) {
 }
 function removeReq(id) {
   if (confirm(`Are you sure you want to delete data of id: ${id}`)) {
-    fetch(`${localhost.origin}/admin/api/remove?id=${id}&token=${token}`, {
+    fetch(`${location.origin}/admin/api/remove?id=${id}&token=${token}`, {
       method: "delete",
     })
       .then((r) => r.json())
@@ -411,7 +411,7 @@ function submitChange() {
     prevPass: prevPass.value,
     newPass: newPass.value,
   };
-  fetch(`${location.origin}/change&token=${token}`, {
+  fetch(`${location.origin}/change?token=${token}`, {
     method: "post",
     headers: {
       accept: "application.json",
