@@ -1,72 +1,13 @@
 import fs from "fs";
 
-let alphabets = [
-  "a",
-  "b",
-  "c",
-  "d",
-  "e",
-  "f",
-  "g",
-  "h",
-  "i",
-  "j",
-  "k",
-  "l",
-  "m",
-  "n",
-  "o",
-  "p",
-  "q",
-  "r",
-  "s",
-  "t",
-  "u",
-  "v",
-  "w",
-  "x",
-  "y",
-  "z",
-];
 
 let myMeaningsData = {};
 
-function reWriteJson(filePre) {
-  const json = fs.readFileSync(`./meaningsJson/${filePre}.json`);
-  const data = JSON.parse(json);
-  console.log("working on letter " + filePre);
-  var newJsonData = [];
-  function getMeanings() {
-    let keyWord = Object.keys(data);
-    console.time(filePre);
-    for (let i = 0; i < keyWord.length; i++) {
-      let key = keyWord[i];
-      let keyObj = data[keyWord[i]];
-      var obj = {};
-      obj[key] = {
-        WORD: key,
-        MEANINGS: [],
-        ANTONYMS: keyObj.ANTONYMS,
-        SYNONYMS: keyObj.SYNONYMS,
-      };
-      var mean = keyObj.MEANINGS;
-      for (const property in mean) {
-        let objArr = Array.from(mean[property]);
-        let myObjNow = {
-          partsOfSpeech: objArr[0],
-          definition: objArr[1],
-          relatedWords: objArr[2],
-          exampleSentence: objArr[3],
-        };
-        let meaningsObj = obj[key].MEANINGS;
-        meaningsObj.push(myObjNow);
-      }
-      newJsonData = { ...newJsonData, ...obj };
-    }
-    console.timeEnd(filePre);
-    myMeaningsData = { ...myMeaningsData, ...newJsonData };
-  }
-  getMeanings();
+joinJsonFiles('meanings1', 'meanings2')
+function joinJsonFiles(file1, file2) {
+  const data1 = JSON.parse(fs.readFileSync(`./meaningsJson/${file1}.json`)).data;
+  const data2 = JSON.parse(fs.readFileSync(`./meaningsJson/${file2}.json`)).data;
+  wf('./processed/meanings.json', {data:{...data1, ...data2}})
 }
 
 function wf(path, data) {
@@ -78,25 +19,6 @@ function wf(path, data) {
   });
 }
 
-fs.open("./processed/meanings.json", "r", function (err, fd) {
-  if (err) {
-    for (let letter of alphabets) {
-      reWriteJson(letter);
-      const prom = new Promise((resolve, reject) => {
-        if (letter == "z") {
-          setTimeout(() => {
-            resolve(26);
-          }, 3000);
-        }
-      });
-      prom.then(() =>
-        wf("./processed/meanings.json", { data: myMeaningsData })
-      );
-    }
-  } else {
-    console.log("The meanings.json file already exists!");
-  }
-});
 
 fs.open("./processed/queries.json", "r", function (err, fd) {
   if (err) {
