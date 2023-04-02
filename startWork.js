@@ -1,14 +1,20 @@
 import fs from "fs";
 
-
 let myMeaningsData = {};
 
-joinJsonFiles('meanings1', 'meanings2')
-function joinJsonFiles(file1, file2) {
-  const data1 = JSON.parse(fs.readFileSync(`./meaningsJson/${file1}.json`)).data;
-  const data2 = JSON.parse(fs.readFileSync(`./meaningsJson/${file2}.json`)).data;
-  wf('./processed/meanings.json', {data:{...data1, ...data2}})
-}
+fs.open("./processed/meanings.json", "r", function (err, fd) {
+  if (err) {
+    const data1 = JSON.parse(
+      fs.readFileSync(`./meaningsJson/meanings1.json`)
+    ).data;
+    const data2 = JSON.parse(
+      fs.readFileSync(`./meaningsJson/meanings2.json`)
+    ).data;
+    wf("./processed/meanings.json", { data: { ...data1, ...data2 } });
+  } else {
+    console.log("meanings.json file already exists");
+  }
+});
 
 function wf(path, data) {
   fs.writeFile(path, JSON.stringify(data), (err) => {
@@ -18,7 +24,6 @@ function wf(path, data) {
     }
   });
 }
-
 
 fs.open("./processed/queries.json", "r", function (err, fd) {
   if (err) {
