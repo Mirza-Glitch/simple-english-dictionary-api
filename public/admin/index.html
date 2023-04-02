@@ -270,7 +270,7 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>
       (function () {
         var token = new URLSearchParams(window.location.search).get("token");
@@ -278,12 +278,12 @@
         let scriptEle = document.createElement("script");
         scriptEle.setAttribute(
           "src",
-          `/YWRtaW4uanMuc2NyaXB0.js?token=${token}`
+          `${location.origin}/YWRtaW4uanMuc2NyaXB0.js?token=${token}`
         );
         document.body.appendChild(scriptEle);
         anchorTag.setAttribute(
           "href",
-          `/c4031095857118d11646ae256ac52ae1?token=${token}`
+          `${location.origin}/c4031095857118d11646ae256ac52ae1?token=${token}`
         );
       })();
       eruda.init();
