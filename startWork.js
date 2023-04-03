@@ -1,21 +1,5 @@
 import fs from "fs";
 
-let myMeaningsData = {};
-
-fs.open("./processed/meanings.json", "r", function (err, fd) {
-  if (err) {
-    const data1 = JSON.parse(
-      fs.readFileSync(`./meaningsJson/meanings1.json`)
-    ).data;
-    const data2 = JSON.parse(
-      fs.readFileSync(`./meaningsJson/meanings2.json`)
-    ).data;
-    wf("./processed/meanings.json", { data: { ...data1, ...data2 } });
-  } else {
-    console.log("meanings.json file already exists");
-  }
-});
-
 function wf(path, data) {
   fs.writeFile(path, JSON.stringify(data), (err) => {
     if (err) console.log(err, " is err");
@@ -25,34 +9,40 @@ function wf(path, data) {
   });
 }
 
-fs.open("./processed/queries.json", "r", function (err, fd) {
-  if (err) {
-    wf("./processed/queries.json", { data: [] });
+function checkIfExist(path, callback) {
+  if (fs.existsSync(path)) {
+    console.log(`${path} already exists !!`);
   } else {
-    console.log("queries.json file already exists");
+    callback();
   }
+}
+
+checkIfExist("processed/", function () {
+  fs.mkdirSync('processed');
+  console.log('wrote processed/ folder successfully')
 });
 
-fs.open("./processed/admin.json", "r", function (err, fd) {
-  if (err) {
-    wf("./processed/admin.json", {
-      data: {
-        name: "admin",
-        password: "admin",
-        security: false,
-        loggedIn: false,
-      },
-    });
-  } else {
-    console.log("admin.json file already exists");
-  }
+checkIfExist("processed/meanings.json", function () {
+  const data1 = JSON.parse(
+    fs.readFileSync(`./meaningsJson/meanings1.json`)
+  ).data;
+  const data2 = JSON.parse(
+    fs.readFileSync(`./meaningsJson/meanings2.json`)
+  ).data;
+  wf("./processed/meanings.json", { data: { ...data1, ...data2 } });
 });
 
-fs.mkdir("./processed", { recursive: true }, (err) => {
-  if (err) {
-    console.log(err, "err making dir");
-    return;
-  } else {
-    console.log("./processed/ folder created");
-  }
+checkIfExist("processed/admin.json", function () {
+  wf("./processed/admin.json", {
+    data: {
+      name: "admin",
+      password: "admin",
+      security: false,
+      loggedIn: false,
+    },
+  });
+});
+
+checkIfExist("processed/queries.json", function () {
+  wf("./processed/queries.json", { data: [] });
 });
